@@ -8,7 +8,7 @@ import java.io.FileWriter;
 // popup options menu
 public class OptionsMenu extends JFrame{
     
-    private JButton saveGame;
+    private JButton saveGame, exit;
     private JPanel optionsPanel;
     JFileChooser fileChooser;
     StopBoard parent;
@@ -24,9 +24,15 @@ public class OptionsMenu extends JFrame{
             saveGame();
         });
         optionsPanel.add(saveGame);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(true);
 		setVisible(true);
+        exit = new JButton("Exit");
+        exit.addActionListener(e -> {
+            this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        });
+        optionsPanel.add(exit);
+
+
     }
 
     public void saveGame(){
