@@ -24,8 +24,8 @@ public class OptionsMenu extends JFrame{
             saveGame();
         });
         optionsPanel.add(saveGame);
-		setResizable(true);
-		setVisible(true);
+	setResizable(true);
+	setVisible(true);
         exit = new JButton("Exit");
         exit.addActionListener(e -> {
             this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
