@@ -117,8 +117,9 @@ public class StopBoard extends JFrame implements MouseListener{
         rollValues = new ArrayList<>();
 
         rollButton.addActionListener(e -> {
+            rightSidePanel.remove(endButton);
+
             if(rollValues.isEmpty()){
-                rightSidePanel.remove(endButton);
                 turnStatusLabel.setText("Group your dice!");
                 movesToMake = 2;
                 leftDiceLabel.setText("");
@@ -394,7 +395,7 @@ public class StopBoard extends JFrame implements MouseListener{
                         column.deactivateColumn();
                 }
                 if((runnerCount < 0) & rollValues.isEmpty()){
-                    endButton = new JButton("End");
+                    endButton = new JButton("End Turn");
                     endButton.addActionListener(ev -> {
                         endTurn(false);
                     });
