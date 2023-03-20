@@ -8,7 +8,7 @@ import java.awt.event.*;
 import java.awt.image.*;
 import java.io.File;
 public class StopBoard extends JFrame implements MouseListener{
-    
+
     // UI Elements
     private HashMap<Player, ArrayList<String>> playerDetailMap;
     // panels
@@ -30,16 +30,16 @@ public class StopBoard extends JFrame implements MouseListener{
     private JLabel rollLabel;
     private JLabel leftDiceLabel, rightDiceLabel;
     private JLabel turnStatusLabel, turnLabel;
-    
+
     //image placeholders
-    
+
     private BufferedImage runner;
     private BufferedImage piece;
-    
-    //Back-End Elements
-    
 
-    
+    //Back-End Elements
+
+
+
     // current player
     private Player currentPlayer;
     private Player loadPlayer;
@@ -64,10 +64,10 @@ public class StopBoard extends JFrame implements MouseListener{
     private int col1, col2;
     private int[] arraySizes = {3,5,7,9,11,13,11,9,7,5,3};
     private int NUM_PLAYERS;
-    
-    
-    
-    
+
+
+
+
     //constructor: initialize the UI and setup game stats for first time
     public StopBoard(int numPlayers, HashMap<Player, ArrayList<String>> playerDetail){
         NUM_PLAYERS = numPlayers;
@@ -89,13 +89,13 @@ public class StopBoard extends JFrame implements MouseListener{
         // dice holders
         rollValues = new ArrayList<>();
         combinations = new ArrayList<>();
-        
+
         //initialize the board-state storage
         initPlayerMap();
-        
+
         // initialize the turn passer
         selecter = new PlayerSelector();
-            
+
         // turn counters
         placedRunners = new ArrayList<>();
 
@@ -105,7 +105,7 @@ public class StopBoard extends JFrame implements MouseListener{
         board = new JPanel();
         board.setLayout(new FlowLayout());
         board.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        
+
         // add columns to the board
         boardColumns = new ArrayList<>();
         int j = 0;
@@ -118,62 +118,62 @@ public class StopBoard extends JFrame implements MouseListener{
             newColumn.addMouseListener(this);
             j += 1;
         }
-                
+
         // initialize the right side panel
         rightSidePanel = new JPanel();
         rightSidePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         rightSidePanel.setLayout(new BoxLayout(rightSidePanel, BoxLayout.PAGE_AXIS));
         rightSidePanel.setPreferredSize(new Dimension(500,800));
-        
+
         // initialize the left side panel
         leftSidePanel = new JPanel();
         leftSidePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        
+
         // initialize the sub-elements
         infoLabel = new JLabel("Can't Stop!");
         infoLabel.setSize(100, 100);
         infoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        
+
         //set turn label
         turnLabel = new JLabel(nameMap.get(currentPlayer) +  ", It's Your Turn!");
         turnLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        
+
         // panel to contains dice images
         rollBox = new JPanel();
         rollBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        
+
         // label containing dice info
         rollLabel = new JLabel("");
         rollLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        
+
         // roll button: set action listener to progress turn
         rollButton = new JButton("Roll!");
         rollButton.addActionListener(e -> {
             rightSidePanel.remove(endButton);
             if(rollValues.isEmpty()){
-                
+
                 movesToMake = 2;
 
                 rightSidePanel.remove(endButton);
                 turnStatusLabel.setText("Group your dice!");
-                
+
                 leftDiceLabel.setText("");
                 rightDiceLabel.setText("");
-                
+
                 generateDice();
                 generateCombinations();
                 generatePairs();
-                
+
                 combinations = new ArrayList<>();
             }
-            
+
         });
-        
+
         // initialize the options button
         optionsButton = new JButton("Options");
         optionsButton.addActionListener(e -> {
             openOptionsMenu();
-    });
+        });
         leftSidePanel.add(optionsButton);
 
         // set up dice selection panels
@@ -190,45 +190,45 @@ public class StopBoard extends JFrame implements MouseListener{
         rightDicePanel.setLayout(new BoxLayout(rightDicePanel, BoxLayout.Y_AXIS));
         rightDiceLabel = new JLabel("");
         rightDicePanel.add(rightDiceLabel);
-        
+
         // add dice selection panels to their container panel
         dicePanel = new JPanel(new FlowLayout());
         dicePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         dicePanel.add(leftDicePanel);
         dicePanel.add(rightDicePanel);
-        
+
         //initialize runnerPanel
-        runnerPanel = new JPanel();     
+        runnerPanel = new JPanel();
         runnerPanel.setLayout(new FlowLayout());
-        
+
         // init turn status label, end button
-        turnStatusLabel = new JLabel("Roll the Dice!");  
+        turnStatusLabel = new JLabel("Roll the Dice!");
         endButton = new JButton("End Turn");
 
         // add ui element to top level panels
         leftSidePanel.add(infoLabel);
         rightSidePanel.add(turnLabel);
         rightSidePanel.add(rollButton);
-        rightSidePanel.add(rollLabel);        
+        rightSidePanel.add(rollLabel);
         rightSidePanel.add(rollBox);
         rightSidePanel.add(rollLabel);
         rightSidePanel.add(dicePanel);
         rightSidePanel.add(runnerPanel);
         rightSidePanel.add(turnStatusLabel);
-        
+
         // load piece and runner assets and add to runnerPanel
         // to be fixed
         setRunnerDisplay(3);
-        
+
         // add the top level panels to the content pane
         getContentPane().add(leftSidePanel, BorderLayout.LINE_START);
         getContentPane().add(board, BorderLayout.CENTER);
         getContentPane().add(rightSidePanel, BorderLayout.LINE_END);
-        
+
         // set Frame details
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setResizable(true);
-		setVisible(true);
+        setResizable(true);
+        setVisible(true);
     }
 
     public void setStartingPlayer(){
@@ -252,16 +252,16 @@ public class StopBoard extends JFrame implements MouseListener{
     public void setRunnerDisplay(int amt){
         runnerPanel.removeAll();
         try{
-            piece = ImageIO.read(new File("assets/" + colourMap.get(currentPlayer).toLowerCase()+  "piece.png"));
+            piece = ImageIO.read(getClass().getResource("assets/" + colourMap.get(currentPlayer).toLowerCase()+  "piece.png"));
         }catch(Exception f){
             System.out.println("Error: File not found");
-        } 
+        }
         try{
-            runner = ImageIO.read(new File("assets/" + "runner.png"));
+            runner = ImageIO.read(getClass().getResource("assets/" + "runner.png"));
         }catch(Exception f){
             System.out.println("Error: File not found");
-        } 
-        
+        }
+
         runnerPanel.add(new JLabel(new ImageIcon(piece)));
         for(int i = 0; i < amt; i++){
             runnerPanel.add(new JLabel(new ImageIcon(runner)));
@@ -270,13 +270,13 @@ public class StopBoard extends JFrame implements MouseListener{
     /** Generate Dice
      */
     public void generateDice(){
-        
+
         // generate the rolls, add to the panel
         DiceRoll roll;
         for(int i = 0; i < 4; i+=1){
             roll = new DiceRoll();
             rollValues.add(roll.value());
-            rollBox.add(roll.generateDie()); 
+            rollBox.add(roll.generateDie());
         }
     }
     // fix the algorithm to use Roll object. Update logic. 
@@ -328,7 +328,7 @@ public class StopBoard extends JFrame implements MouseListener{
         leftDiceLabel.setText("Place a Runner in Column " + Integer.toString(col1));
         rightDiceLabel.setText("Place a Runner in Column " + Integer.toString(col2));
         turnStatusLabel.setText("Advance a runner in available columns!");
-        
+
         // reset the dice stats
         rollBox.removeAll();
         rollValues.clear();
@@ -344,14 +344,14 @@ public class StopBoard extends JFrame implements MouseListener{
                 boardColumns.get(col1 - 2).activateColumn();
             }
         }
-        
+
         if(!boardColumns.get(col2 - 2).columnWon()){
             if(placedRunners.contains(col2 - 2)){
                 boardColumns.get(col2 - 2).activateColumn();
             }
             else if(placedRunners.size() < 3){
                 boardColumns.get(col2 - 2).activateColumn();
-                
+
             }
         }
         // check for bust
@@ -364,29 +364,29 @@ public class StopBoard extends JFrame implements MouseListener{
             selected.deactivateColumn();
             if(! placedRunners.contains(boardColumns.indexOf(selected)))
                 placedRunners.add(boardColumns.indexOf(selected));
-                setRunnerDisplay(3 - placedRunners.size());
+            setRunnerDisplay(3 - placedRunners.size());
             selected.advanceRunner();
             if(placedRunners.size() >= 3)
-            for(StopColumn col : boardColumns){
-                if(! placedRunners.contains(boardColumns.indexOf(col)))    
-                    col.deactivateColumn();
+                for(StopColumn col : boardColumns){
+                    if(! placedRunners.contains(boardColumns.indexOf(col)))
+                        col.deactivateColumn();
                 }
-            }
-            if(rollValues.isEmpty()){
-                rightSidePanel.remove(endButton);
-                endButton = new JButton("End");
-                endButton.addActionListener(ev -> {
-                    passTurn(false);
-                });
-                rightSidePanel.add(endButton);
-                turnStatusLabel.setText("End your turn or roll again!");    
-                this.repaint();
-                this.revalidate();
-            }
-            else{
-                turnStatusLabel.setText("Roll Again!");
-            }
         }
+        if(rollValues.isEmpty()){
+            rightSidePanel.remove(endButton);
+            endButton = new JButton("End");
+            endButton.addActionListener(ev -> {
+                passTurn(false);
+            });
+            rightSidePanel.add(endButton);
+            turnStatusLabel.setText("End your turn or roll again!");
+            this.repaint();
+            this.revalidate();
+        }
+        else{
+            turnStatusLabel.setText("Roll Again!");
+        }
+    }
 
 
 
@@ -398,7 +398,7 @@ public class StopBoard extends JFrame implements MouseListener{
         }
         return true;
     }
-    
+
     //update UI on reaching bust state
     public void bust(){
         turnStatusLabel.setText("You Are Bust! End your Turn Now.");
@@ -406,10 +406,10 @@ public class StopBoard extends JFrame implements MouseListener{
         rightDiceLabel.setText("BUST!");
         endButton = new JButton("End Turn");
         endButton.addActionListener(e -> {
-         passTurn(true);
+            passTurn(true);
         });
         rightSidePanel.add(endButton);
-        
+
         this.repaint();
         this.revalidate();
     }
@@ -425,11 +425,11 @@ public class StopBoard extends JFrame implements MouseListener{
             if (!Bust) {
                 col.placePieces(currentPlayerColour);
             }
-            
+
             //reset columns
             col.unSetRunner();
-            col.resetColumn();    
-        
+            col.resetColumn();
+
         }
         String text = "You have successfully advanced your pieces!";
         if (Bust) text = "You have lost all your runners!";
@@ -473,10 +473,10 @@ public class StopBoard extends JFrame implements MouseListener{
         return colourMap.get(currentPlayer);
     }
     /** On the passing of a turn
-    *   clear the columns
-        set the runner Idx and Piece idx
-        draw it onto the column
-    */
+     *   clear the columns
+     set the runner Idx and Piece idx
+     draw it onto the column
+     */
     public void setColumns(){
         // set the column stats from playerPieces map
         for(int i = 0; i < boardColumns.size(); i++){
@@ -489,7 +489,7 @@ public class StopBoard extends JFrame implements MouseListener{
             col.clean();
             col.setPieces(currentPlayerColour);
         }
-        
+
     }
 
     // store the player's current board state to the hashmap
@@ -501,26 +501,26 @@ public class StopBoard extends JFrame implements MouseListener{
         }
         playerPieces.put(currentPlayer, list);
     }
-    
+
     // opens the options menu
     public void openOptionsMenu(){
         options = new OptionsMenu(this);
     }
-    
+
     // generate and return text for save file
 
     /** save game data encoding
      *    playerx
      *    playerx pieces
-     *    
+     *
      *    playery
      *    playery pieces
      *    ...
-     * 
+     *
      *    currentPlayer
      *    currentPlayer runners
      *    movesToMake
-     * 
+     *
      */
     public String passData(){
         // init data string
@@ -539,10 +539,10 @@ public class StopBoard extends JFrame implements MouseListener{
                 data += Integer.toString(j) + ",";
             }
             data += "\n";
-        }        
+        }
         // add the current player
         data += currentPlayer.name() + "\n";
-        
+
         return data;
     }
 
@@ -563,7 +563,7 @@ public class StopBoard extends JFrame implements MouseListener{
             for(String s : loadLines[i + 3].split(",")){
                 pieces.add(Integer.valueOf(s));
             }
-            playerPieces.put(loadPlayer, pieces);            
+            playerPieces.put(loadPlayer, pieces);
         }
         currentPlayer = Player.valueOf(loadLines[loadLines.length - 1]);
         currentPlayerColour = colourMap.get(currentPlayer);
@@ -588,7 +588,7 @@ public class StopBoard extends JFrame implements MouseListener{
             StopColumn col = boardColumns.get(i);
             if((pieces.get(i)) != col.column.size())
                 col.column.get(pieces.get(i)).fill(currentPlayerColour);
-                col.setRunnerIdx(pieces.get(i));
+            col.setRunnerIdx(pieces.get(i));
         }
         this.repaint();
         this.revalidate();
@@ -605,13 +605,13 @@ public class StopBoard extends JFrame implements MouseListener{
     public void initPlayerMap(){
         playerPieces = new HashMap<>();
         ArrayList<Integer> STARTING_POSITION = new ArrayList<>();
-        
+
         for(int i: arraySizes){
             STARTING_POSITION.add(i);
         }
 
         Player[] players = {Player.player1, Player.player2, Player.player3, Player.player4};
-        
+
         for(int i = 0; i < NUM_PLAYERS; i++){
             playerPieces.put(players[i], STARTING_POSITION);
         }
@@ -628,7 +628,7 @@ public class StopBoard extends JFrame implements MouseListener{
             columnSelected(selected);
         }
     }
-    
+
     public void mouseEntered(MouseEvent e){}
     public void mouseExited(MouseEvent e) {}
     public void mousePressed(MouseEvent arg0) {}

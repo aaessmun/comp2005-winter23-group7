@@ -9,7 +9,7 @@ import java.awt.image.*;
 import java.io.File;
 
 
- 
+
 
 /* StopTile class
  * represents a single tile on the can't stop board
@@ -18,14 +18,14 @@ import java.io.File;
 public class StopTile extends JPanel implements MouseListener{
 
     /* Constructor
-     * 
+     *
      */
     private BufferedImage runner;
     private BufferedImage piece;
     private Boolean isOccupied;
-    
-    
-    
+
+
+
     public StopTile(){
 
         isOccupied = false;
@@ -35,11 +35,11 @@ public class StopTile extends JPanel implements MouseListener{
         this.setBorder(BorderFactory.createCompoundBorder(padding, border));
         this.setBackground(Color.white);
         try{
-            runner = ImageIO.read(new File("assets/" + "runner.png"));
-        }   
+            runner = ImageIO.read(getClass().getResource("assets/" + "runner.png"));
+        }
         catch(Exception f){
             System.out.println("Error: File not found");
-        } 
+        }
     }
 
     // add a runner to the tile
@@ -53,28 +53,28 @@ public class StopTile extends JPanel implements MouseListener{
     }
     public void unOccupy(){isOccupied = false;}
     // on turn end: convert runners into player's coloured pieces
-    
+
     public void claim(String color){
         //implement
         if(isOccupied){
             this.removeAll();
             try{
-                piece = ImageIO.read(new File("assets/" +  color + "piece.png"));
+                piece = ImageIO.read(getClass().getResource("assets/" +  color + "piece.png"));
             }
             catch(Exception e){
-    
+
             }
             this.add(new JLabel(new ImageIcon(piece)));
             this.repaint();
             this.revalidate();
         }
-        
+
     }
 
     public void fill(String color){
         this.removeAll();
         try{
-            piece = ImageIO.read(new File("assets/" +  color + "piece.png"));
+            piece = ImageIO.read(getClass().getResource("assets/" +  color + "piece.png"));
         }
         catch(Exception e){
 
@@ -83,8 +83,8 @@ public class StopTile extends JPanel implements MouseListener{
         this.repaint();
         this.revalidate();
     }
-    
-    
+
+
     public void clear(){
         isOccupied = false;
         this.removeAll();
@@ -101,8 +101,8 @@ public class StopTile extends JPanel implements MouseListener{
     }
 
     public void mouseEntered(MouseEvent e){}
-	public void mouseExited(MouseEvent e) {}
+    public void mouseExited(MouseEvent e) {}
     public void mousePressed(MouseEvent arg0) {}
-	public void mouseReleased(MouseEvent arg0) {}
+    public void mouseReleased(MouseEvent arg0) {}
     public void mouseClicked(MouseEvent arg0) {}
 }
