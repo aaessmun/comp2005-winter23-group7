@@ -1,0 +1,126 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.*;
+import java.io.File;
+import java.net.URL;
+import java.util.*;
+
+import javax.imageio.ImageIO;
+
+public class PlayerCard extends JPanel{
+    private String colorSelected;
+    private JLabel playerLabel;
+    private JLabel playerNum;
+    private String player;
+    private JTextField PlayerName;
+    private String[] diffi = {"Level","Easy","Hard"};
+
+
+    private JComboBox<String> diff = new JComboBox<>(diffi);
+    private JComboBox<String> color; 
+    private JCheckBox confirm = new JCheckBox();
+
+    public PlayerCard(Set<String> AlreadySelectedcolor, String[] colour){
+    
+        this.setPreferredSize(new Dimension(200,205));
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.setBackground(Color.LIGHT_GRAY);
+
+        color = new JComboBox<>(colour);
+
+        confirm.setText("Computer Player");
+        player = null;
+        playerLabel = new JLabel();
+        PlayerName = new JTextField("Enter Your Name!");
+        // when checkbox is selected.
+        confirm.addActionListener(i->{
+            this.setBackground(Color.LIGHT_GRAY);
+            this.remove(diff);
+            if(confirm.isSelected()){
+                this.setBackground(Color.GRAY);
+                difficulty();
+            }
+        });
+
+        //When player will select color
+        color.addActionListener(i->{
+            this.colorSelected = (String)color.getSelectedItem();
+            try{
+                if(AlreadySelectedcolor.add(colorSelected)){
+                    
+                    player = "assets/" + colorSelected.toLowerCase() + "man.png";
+                }
+                else{
+                    player = "assets/whiteman.png";
+                    new JPopupMenu ("A player has already selected that colour!");
+                }
+            }
+            catch(Exception f){
+                
+            }
+            playerLabel.setIcon(new ImageIcon(getClass().getResource(player))); 
+            this.add(playerLabel);
+            if(confirm.isSelected())
+            {
+                this.add(diff);
+            }
+            this.remove(PlayerName);
+            this.add(PlayerName,BorderLayout.SOUTH);
+            SwingUtilities.updateComponentTreeUI(this);
+            this.invalidate();
+            this.validate();
+            this.repaint();
+        });
+        
+        //default white color of user.
+        
+        String defaultplayer = "assets/whiteman.png";
+        playerLabel.setIcon(new ImageIcon(getClass().getResource("assets/whiteman.png"))); 
+        playerNum = new JLabel(PlayerName.getText());
+        
+            
+      
+
+        
+        
+        this.add(playerNum);
+    
+        this.add(confirm);
+        this.add(color);
+        this.add(playerLabel);
+       // PlayerName.setPreferredSize(new Dimension(100,5));
+        this.add(PlayerName,BorderLayout.SOUTH);
+        this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+    }
+
+    public void difficulty() {   
+
+        //if(colorSelected.equals("Color"))
+        {
+
+            this.add(diff);
+        }
+        this.remove(PlayerName);
+        this.add(PlayerName,BorderLayout.SOUTH);
+        SwingUtilities.updateComponentTreeUI(this);
+        this.invalidate();
+        this.validate();
+        this.repaint();
+    }
+   
+    public String getPlayerName(){
+        return PlayerName.getText(); 
+    }
+    
+    public String getPlayerColor(){
+        return colorSelected;
+    }
+    
+    public String getPlayerLevel(){
+        return (String)diff.getSelectedItem();
+    }   
+
+    public boolean isComputerPlayer(){
+        return confirm.isSelected();
+    }
+}
